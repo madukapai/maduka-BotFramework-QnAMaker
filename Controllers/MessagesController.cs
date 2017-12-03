@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace maduka_BotFramework_QnAMaker
+namespace Microsoft.Bot.Sample.QnABot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -22,6 +22,7 @@ namespace maduka_BotFramework_QnAMaker
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
+            // check if activity is of type message
             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
 
             // check if activity is of type message
@@ -50,7 +51,7 @@ namespace maduka_BotFramework_QnAMaker
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
-                
+
                 var reply = message.CreateReply("有任何簡單的問題都可以點下面的選項查看解答喔");
                 reply.Type = ActivityTypes.Message;
                 reply.TextFormat = TextFormatTypes.Plain;

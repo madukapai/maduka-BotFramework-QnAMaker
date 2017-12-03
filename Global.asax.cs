@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 
-namespace maduka_BotFramework_QnAMaker
+namespace SimpleEchoBot
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

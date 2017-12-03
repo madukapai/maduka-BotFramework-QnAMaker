@@ -3,7 +3,7 @@ using System.Configuration;
 
 using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
 
-namespace maduka_BotFramework_QnAMaker
+namespace Microsoft.Bot.Sample.QnABot
 {
     // For more information about this template visit http://aka.ms/azurebots-csharp-qnamaker
     [Serializable]
