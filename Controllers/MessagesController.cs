@@ -22,6 +22,8 @@ namespace maduka_BotFramework_QnAMaker
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
+            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+
             // check if activity is of type message
             if (activity.GetActivityType() == ActivityTypes.Message)
             {
@@ -29,8 +31,10 @@ namespace maduka_BotFramework_QnAMaker
             }
             else
             {
-                HandleSystemMessage(activity);
+                var reply = HandleSystemMessage(activity);
+                await connector.Conversations.ReplyToActivityAsync(reply);
             }
+
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
         }
 
