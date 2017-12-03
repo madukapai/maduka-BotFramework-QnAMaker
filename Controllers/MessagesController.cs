@@ -30,11 +30,9 @@ namespace Microsoft.Bot.Sample.QnABot
             {
                 await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
             }
-            else
-            {
-                var reply = HandleSystemMessage(activity);
-                await connector.Conversations.ReplyToActivityAsync(reply);
-            }
+
+            var reply = HandleSystemMessage(activity);
+            await connector.Conversations.ReplyToActivityAsync(reply);
 
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
         }
@@ -53,6 +51,27 @@ namespace Microsoft.Bot.Sample.QnABot
                 // Not available in all channels
 
                 var reply = message.CreateReply("有任何簡單的問題都可以點下面的選項查看解答喔");
+                reply.Type = ActivityTypes.Message;
+                reply.TextFormat = TextFormatTypes.Plain;
+
+                reply.SuggestedActions = new SuggestedActions()
+                {
+                    Actions = new List<CardAction>()
+                    {
+                        new CardAction(){ Title = "如何進行退貨", Type=ActionTypes.ImBack, Value="如何進行退貨" },
+                        new CardAction(){ Title = "如何取貨", Type=ActionTypes.ImBack, Value="如何取貨" },
+                        new CardAction(){ Title = "如何聯絡客服", Type=ActionTypes.ImBack, Value="如何聯絡客服" },
+                        new CardAction(){ Title = "總公司的位置", Type=ActionTypes.ImBack, Value="總公司的位置" },
+                        new CardAction(){ Title = "各門市的地址與資訊可以從那裡取得", Type=ActionTypes.ImBack, Value="各門市的地址與資訊可以從那裡取得" },
+                        new CardAction(){ Title = "請問運費或是手續費該如何計算", Type=ActionTypes.ImBack, Value="請問運費或是手續費該如何計算" },
+                    }
+                };
+
+                return reply;
+            }
+            else if (message.Type == ActivityTypes.Message)
+            {
+                var reply = message.CreateReply("請點選下方的快速連結問題內容");
                 reply.Type = ActivityTypes.Message;
                 reply.TextFormat = TextFormatTypes.Plain;
 
