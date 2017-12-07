@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="948c36b8114c4de2a81a2a5e86c35510" Name="Diagram1">
-        <EntityTypeShape EntityType="QnAMakerDbModel.ConversationFile" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QnAMakerDbModel.ConversationFile" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

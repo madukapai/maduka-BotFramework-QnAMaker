@@ -4,36 +4,37 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="QnAMakerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="QnAMakerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ConversationFile">
           <Key>
             <PropertyRef Name="ConversationId" />
           </Key>
-          <Property Name="ConversationId" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ConversationId" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="FromName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FromId" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ServiceUrl" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityContainer Name="QnAMakerDbModelStoreContainer">
           <EntitySet Name="ConversationFile" EntityType="Self.ConversationFile" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QnAMakerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="QnAMakerDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ConversationFile" EntityType="QnAMakerDbModel.ConversationFile" />
+        </EntityContainer>
         <EntityType Name="ConversationFile">
           <Key>
             <PropertyRef Name="ConversationId" />
           </Key>
-          <Property Name="ConversationId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FromName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FromId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ConversationId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FromName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FromId" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ServiceUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="QnAMakerDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ConversationFile" EntityType="Self.ConversationFile" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -43,10 +44,11 @@
           <EntitySetMapping Name="ConversationFile">
             <EntityTypeMapping TypeName="QnAMakerDbModel.ConversationFile">
               <MappingFragment StoreEntitySet="ConversationFile">
-                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
-                <ScalarProperty Name="FromName" ColumnName="FromName" />
-                <ScalarProperty Name="FromId" ColumnName="FromId" />
+                <ScalarProperty Name="ServiceUrl" ColumnName="ServiceUrl" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FromId" ColumnName="FromId" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -18,5 +18,6 @@ namespace QnABot.Models
         public string FromName { get; set; }
         public string FromId { get; set; }
         public System.DateTime CreateDate { get; set; }
+        public string ServiceUrl { get; set; }
     }
 }

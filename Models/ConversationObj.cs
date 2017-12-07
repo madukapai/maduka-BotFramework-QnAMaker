@@ -26,8 +26,9 @@ namespace QnABot.Models
         /// <param name="strConversationId"></param>
         /// <param name="strFromName"></param>
         /// <param name="strFromId"></param>
+        /// <param name="strServiceUrl"></param>
         /// <returns></returns>
-        public void Add(string strConversationId, string strFromName, string strFromId)
+        public void Add(string strConversationId, string strFromName, string strFromId, string strServiceUrl)
         {
             ConversationFile objCon = this.Query(strConversationId);
 
@@ -39,6 +40,7 @@ namespace QnABot.Models
                     CreateDate = DateTime.Now,
                     FromId = strFromId,
                     FromName = strFromName,
+                    ServiceUrl = strServiceUrl,
                 };
 
                 db.ConversationFile.Add(objCon);
