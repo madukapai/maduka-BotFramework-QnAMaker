@@ -49,7 +49,16 @@ namespace Microsoft.Bot.Sample.QnABot
         private Activity HandleSystemMessage(Activity message)
         {
             // 把這次的對話加到資料庫中作記錄
-            // new ConversationObj().Add(message.Conversation.Id, "", message.ChannelId);
+            try
+            {
+                new ConversationObj().Add(message.Conversation.Id, "", message.ChannelId);
+            }
+            catch (Exception e)
+            {
+                string strMsg = message.Conversation.Id + "-" + message.ChannelId + "-" + e.Message;
+                var reply = message.CreateReply(strMsg);
+                return reply;
+            }
 
             if (message.Type == ActivityTypes.DeleteUserData)
             {
