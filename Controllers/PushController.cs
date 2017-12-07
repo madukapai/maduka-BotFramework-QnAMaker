@@ -17,9 +17,9 @@ namespace QnABot.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<bool> Get()
+        public async Task<string> Get()
         {
-            bool blflag = true;
+            string strMsg = "OK";
 
             try
             {
@@ -43,10 +43,10 @@ namespace QnABot.Controllers
             }
             catch (Exception e)
             {
-                blflag = false;
+                strMsg = e.Message;
             }
 
-            return blflag;
+            return strMsg;
         }
     }
 }
