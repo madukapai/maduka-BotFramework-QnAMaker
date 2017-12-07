@@ -181,6 +181,16 @@
     <Compile Include="Models\ConversationFile.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PushButton.cs">
+      <DependentUpon>QnAMakerDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PushFile.cs">
+      <DependentUpon>QnAMakerDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PushImage.cs">
+      <DependentUpon>QnAMakerDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PushObj.cs" />
     <Compile Include="Models\QnAMakerDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
