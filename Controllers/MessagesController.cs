@@ -51,7 +51,7 @@ namespace Microsoft.Bot.Sample.QnABot
             // 把這次的對話加到資料庫中作記錄
             try
             {
-                //new ConversationObj().Add(message.Conversation.Id, message.From.Name, message.From.Id);
+                new ConversationObj().Add(message.Conversation.Id, message.From.Name, message.From.Id);
             }
             catch (Exception e)
             {
