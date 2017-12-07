@@ -19,5 +19,8 @@ namespace QnABot.Models
         public string FromId { get; set; }
         public System.DateTime CreateDate { get; set; }
         public string ServiceUrl { get; set; }
+        public string RecipientId { get; set; }
+        public string RecipientName { get; set; }
+        public string ChannelId { get; set; }
     }
 }
