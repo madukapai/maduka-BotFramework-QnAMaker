@@ -24,6 +24,7 @@ namespace QnABot.Models
                     MainMessage = x.MainMessage,
                     PushId = x.PushId,
                     PushType = x.PushType,
+                    Layout = x.Layout,
                 })
                 .ToList();
 
@@ -38,6 +39,7 @@ namespace QnABot.Models
                         ImageUrl = x.ImageUrl,
                         SubTitle = x.SubTitle,
                         Title = x.Title,
+                        PushCardId = x.PushCardId,
                     })
                     .ToList();
 
@@ -56,6 +58,7 @@ namespace QnABot.Models
             public int PushId { get; set; }
             public string MainMessage { get; set; }
             public string PushType { get; set; }
+            public string Layout { get; set; }
             public List<GetPushCard> cards { get; set; }
         }
 

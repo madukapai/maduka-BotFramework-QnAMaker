@@ -18,5 +18,6 @@ namespace QnABot.Models
         public string MainMessage { get; set; }
         public bool IsEnable { get; set; }
         public string PushType { get; set; }
+        public string Layout { get; set; }
     }
 }

@@ -45,7 +45,8 @@
           <Property Name="PushId" Type="int" Nullable="false" />
           <Property Name="MainMessage" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsEnable" Type="bit" Nullable="false" />
-          <Property Name="PushType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PushType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Layout" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityContainer Name="QnAMakerDbModelStoreContainer">
           <EntitySet Name="ConversationFile" EntityType="Self.ConversationFile" Schema="dbo" store:Type="Tables" />
@@ -103,7 +104,8 @@
           <Property Name="PushId" Type="Int32" Nullable="false" />
           <Property Name="MainMessage" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="PushType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PushType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Layout" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -150,6 +152,7 @@
           <EntitySetMapping Name="PushFile">
             <EntityTypeMapping TypeName="QnAMakerDbModel.PushFile">
               <MappingFragment StoreEntitySet="PushFile">
+                <ScalarProperty Name="Layout" ColumnName="Layout" />
                 <ScalarProperty Name="PushType" ColumnName="PushType" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="MainMessage" ColumnName="MainMessage" />

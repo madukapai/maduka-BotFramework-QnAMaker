@@ -48,7 +48,7 @@ namespace QnABot.Controllers
                         // 放入推送訊息內容
                         message.Text = push[p].MainMessage;
 
-                        // 放入Thumbnail
+                        // 放入card
                         for (int t = 0; t < push[p].cards.Count; t++)
                         {
                             List<CardImage> cardImages = new List<CardImage>();
@@ -89,12 +89,15 @@ namespace QnABot.Controllers
                                     Title = push[p].cards[t].Title,
                                     Subtitle = push[p].cards[t].SubTitle,
                                     Images = cardImages,
-                                    Buttons = cardButtons
+                                    Buttons = cardButtons,
                                 };
                                 Attachment plAttachment = plCard.ToAttachment();
                                 message.Attachments.Add(plAttachment);
                             }
+
                         }
+
+                        message.AttachmentLayout = push[p].Layout;
 
                         // 送出訊息
                         await connector.Conversations.SendToConversationAsync((Activity)message);
