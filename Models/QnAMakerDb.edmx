@@ -23,10 +23,20 @@
             <PropertyRef Name="PushButtonId" />
           </Key>
           <Property Name="PushButtonId" Type="int" Nullable="false" />
-          <Property Name="PushId" Type="int" Nullable="false" />
+          <Property Name="PushCardId" Type="int" Nullable="false" />
           <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ActionType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PushCard">
+          <Key>
+            <PropertyRef Name="PushCardId" />
+          </Key>
+          <Property Name="PushCardId" Type="int" Nullable="false" />
+          <Property Name="PushId" Type="int" Nullable="false" />
+          <Property Name="ImageUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SubTitle" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="PushFile">
           <Key>
@@ -34,23 +44,14 @@
           </Key>
           <Property Name="PushId" Type="int" Nullable="false" />
           <Property Name="MainMessage" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="SubTitle" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsEnable" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PushImage">
-          <Key>
-            <PropertyRef Name="PushImageId" />
-          </Key>
-          <Property Name="PushImageId" Type="int" Nullable="false" />
-          <Property Name="PushId" Type="int" Nullable="false" />
-          <Property Name="ImageUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PushType" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityContainer Name="QnAMakerDbModelStoreContainer">
           <EntitySet Name="ConversationFile" EntityType="Self.ConversationFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PushButton" EntityType="Self.PushButton" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PushCard" EntityType="Self.PushCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PushFile" EntityType="Self.PushFile" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PushImage" EntityType="Self.PushImage" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -59,9 +60,9 @@
         <EntityContainer Name="QnAMakerDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ConversationFile" EntityType="QnAMakerDbModel.ConversationFile" />
           <EntitySet Name="PushButton" EntityType="QnAMakerDbModel.PushButton" />
-          <EntitySet Name="PushImage" EntityType="QnAMakerDbModel.PushImage" />
+          <EntitySet Name="PushCard" EntityType="QnAMakerDbModel.PushCard" />
           <EntitySet Name="PushFile" EntityType="QnAMakerDbModel.PushFile" />
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="ConversationFile">
           <Key>
             <PropertyRef Name="ConversationId" />
@@ -80,18 +81,20 @@
             <PropertyRef Name="PushButtonId" />
           </Key>
           <Property Name="PushButtonId" Type="Int32" Nullable="false" />
-          <Property Name="PushId" Type="Int32" Nullable="false" />
+          <Property Name="PushCardId" Type="Int32" Nullable="false" />
           <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ActionType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="PushImage">
+        <EntityType Name="PushCard">
           <Key>
-            <PropertyRef Name="PushImageId" />
+            <PropertyRef Name="PushCardId" />
           </Key>
-          <Property Name="PushImageId" Type="Int32" Nullable="false" />
+          <Property Name="PushCardId" Type="Int32" Nullable="false" />
           <Property Name="PushId" Type="Int32" Nullable="false" />
           <Property Name="ImageUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubTitle" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PushFile">
           <Key>
@@ -99,11 +102,10 @@
           </Key>
           <Property Name="PushId" Type="Int32" Nullable="false" />
           <Property Name="MainMessage" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SubTitle" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="PushType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -129,32 +131,33 @@
                 <ScalarProperty Name="ActionType" ColumnName="ActionType" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="PushId" ColumnName="PushId" />
+                <ScalarProperty Name="PushCardId" ColumnName="PushCardId" />
                 <ScalarProperty Name="PushButtonId" ColumnName="PushButtonId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PushImage">
-            <EntityTypeMapping TypeName="QnAMakerDbModel.PushImage">
-              <MappingFragment StoreEntitySet="PushImage">
+          <EntitySetMapping Name="PushCard">
+            <EntityTypeMapping TypeName="QnAMakerDbModel.PushCard">
+              <MappingFragment StoreEntitySet="PushCard">
+                <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
                 <ScalarProperty Name="PushId" ColumnName="PushId" />
-                <ScalarProperty Name="PushImageId" ColumnName="PushImageId" />
+                <ScalarProperty Name="PushCardId" ColumnName="PushCardId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PushFile">
             <EntityTypeMapping TypeName="QnAMakerDbModel.PushFile">
               <MappingFragment StoreEntitySet="PushFile">
+                <ScalarProperty Name="PushType" ColumnName="PushType" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-                <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="MainMessage" ColumnName="MainMessage" />
                 <ScalarProperty Name="PushId" ColumnName="PushId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

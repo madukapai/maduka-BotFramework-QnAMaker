@@ -15,7 +15,7 @@ namespace QnABot.Models
     public partial class PushButton
     {
         public int PushButtonId { get; set; }
-        public int PushId { get; set; }
+        public int PushCardId { get; set; }
         public string Url { get; set; }
         public string Title { get; set; }
         public string ActionType { get; set; }

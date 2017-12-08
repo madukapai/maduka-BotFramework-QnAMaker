@@ -184,10 +184,10 @@
     <Compile Include="Models\PushButton.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PushFile.cs">
+    <Compile Include="Models\PushCard.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PushImage.cs">
+    <Compile Include="Models\PushFile.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PushObj.cs" />

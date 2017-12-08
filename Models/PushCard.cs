@@ -12,10 +12,12 @@ namespace QnABot.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PushImage
+    public partial class PushCard
     {
-        public int PushImageId { get; set; }
+        public int PushCardId { get; set; }
         public int PushId { get; set; }
         public string ImageUrl { get; set; }
+        public string Title { get; set; }
+        public string SubTitle { get; set; }
     }
 }

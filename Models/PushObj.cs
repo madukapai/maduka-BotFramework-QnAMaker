@@ -21,20 +21,31 @@ namespace QnABot.Models
                 .Where(x => x.IsEnable == true)
                 .Select(x => new GetPushFileResult()
                 {
-                    IsEnable = x.IsEnable,
                     MainMessage = x.MainMessage,
                     PushId = x.PushId,
-                    SubTitle = x.SubTitle,
-                    Title = x.Title,
+                    PushType = x.PushType,
                 })
                 .ToList();
 
-            // 找出下面的image與button
+            // 找出下面的Card與button
             for (int i = 0; i < result.Count; i++)
             {
                 int intPushId = result[i].PushId;
-                result[i].images = db.PushImage.Where(x => x.PushId == intPushId).ToList();
-                result[i].buttons = db.PushButton.Where(x => x.PushId == intPushId).ToList();
+
+                result[i].cards = db.PushCard.Where(x => x.PushId == intPushId)
+                    .Select(x => new GetPushCard()
+                    {
+                        ImageUrl = x.ImageUrl,
+                        SubTitle = x.SubTitle,
+                        Title = x.Title,
+                    })
+                    .ToList();
+
+                for (int t = 0; t < result[i].cards.Count; t++)
+                {
+                    int indPushCardId = result[i].cards[t].PushCardId;
+                    result[i].cards[t].buttons = db.PushButton.Where(x => x.PushCardId == indPushCardId).ToList();
+                }
             }
 
             return result;
@@ -44,10 +55,16 @@ namespace QnABot.Models
         {
             public int PushId { get; set; }
             public string MainMessage { get; set; }
+            public string PushType { get; set; }
+            public List<GetPushCard> cards { get; set; }
+        }
+
+        public class GetPushCard
+        {
+            public int PushCardId { get; set; }
+            public string ImageUrl { get; set; }
             public string Title { get; set; }
             public string SubTitle { get; set; }
-            public bool IsEnable { get; set; }
-            public List<PushImage> images { get; set; }
             public List<PushButton> buttons { get; set; }
         }
     }
