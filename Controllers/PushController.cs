@@ -17,13 +17,13 @@ namespace QnABot.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<string> Get()
+        public async Task<string> Get(string strConversationId)
         {
             string strMsg = "OK";
 
             try
             {
-                List<ConversationFile> data = new Models.ConversationObj().Query();
+                List<ConversationFile> data = new Models.ConversationObj().Query(strConversationId);
 
                 for (int i = 0; i < data.Count; i++)
                 {

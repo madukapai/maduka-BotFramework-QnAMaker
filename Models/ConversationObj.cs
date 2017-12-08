@@ -25,9 +25,9 @@ namespace QnABot.Models
         /// </summary>
         /// <param name="strConversationId"></param>
         /// <returns></returns>
-        public ConversationFile Query(string strConversationId)
+        public List<ConversationFile> Query(string strConversationId)
         {
-            return db.ConversationFile.Where(x => x.ConversationId == strConversationId).FirstOrDefault();
+            return db.ConversationFile.Where(x => x.ConversationId == strConversationId).ToList();
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace QnABot.Models
         /// <returns></returns>
         public void Add(Activity message)
         {
-            ConversationFile objCon = this.Query(message.Conversation.Id);
+            ConversationFile objCon = this.Query(message.Conversation.Id).FirstOrDefault();
 
             if (objCon == null)
             {
