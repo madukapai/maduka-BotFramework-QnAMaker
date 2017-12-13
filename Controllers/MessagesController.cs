@@ -70,12 +70,8 @@ namespace Microsoft.Bot.Sample.QnABot
                 {
                     Actions = new List<CardAction>()
                     {
-                        new CardAction(){ Title = "如何進行退貨", Type=ActionTypes.ImBack, Value="如何進行退貨" },
-                        new CardAction(){ Title = "如何取貨", Type=ActionTypes.ImBack, Value="如何取貨" },
-                        new CardAction(){ Title = "如何聯絡客服", Type=ActionTypes.ImBack, Value="如何聯絡客服" },
-                        new CardAction(){ Title = "總公司的位置", Type=ActionTypes.ImBack, Value="總公司的位置" },
-                        new CardAction(){ Title = "各門市的地址與資訊可以從那裡取得", Type=ActionTypes.ImBack, Value="各門市的地址與資訊可以從那裡取得" },
-                        new CardAction(){ Title = "請問運費或是手續費該如何計算", Type=ActionTypes.ImBack, Value="請問運費或是手續費該如何計算" },
+                        new CardAction(){ Title = "有關QnA Maker", Type=ActionTypes.ImBack, Value="有關QnA Maker" },
+                        new CardAction(){ Title = "參考資料", Type=ActionTypes.ImBack, Value="參考資料" },
                         new CardAction(){ Title = "我想連絡小編", Type=ActionTypes.ImBack, Value="我想連絡小編" },
                     }
                 };
@@ -99,12 +95,8 @@ namespace Microsoft.Bot.Sample.QnABot
                     {
                         Actions = new List<CardAction>()
                     {
-                        new CardAction(){ Title = "如何進行退貨", Type=ActionTypes.ImBack, Value="如何進行退貨" },
-                        new CardAction(){ Title = "如何取貨", Type=ActionTypes.ImBack, Value="如何取貨" },
-                        new CardAction(){ Title = "如何聯絡客服", Type=ActionTypes.ImBack, Value="如何聯絡客服" },
-                        new CardAction(){ Title = "總公司的位置", Type=ActionTypes.ImBack, Value="總公司的位置" },
-                        new CardAction(){ Title = "各門市的地址與資訊可以從那裡取得", Type=ActionTypes.ImBack, Value="各門市的地址與資訊可以從那裡取得" },
-                        new CardAction(){ Title = "請問運費或是手續費該如何計算", Type=ActionTypes.ImBack, Value="請問運費或是手續費該如何計算" },
+                        new CardAction(){ Title = "有關QnA Maker", Type=ActionTypes.ImBack, Value="有關QnA Maker" },
+                        new CardAction(){ Title = "參考資料", Type=ActionTypes.ImBack, Value="參考資料" },
                         new CardAction(){ Title = "我想連絡小編", Type=ActionTypes.ImBack, Value="我想連絡小編" },
                         }
                     };
