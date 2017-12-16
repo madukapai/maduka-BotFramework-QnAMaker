@@ -206,6 +206,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QnAMakerDb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionFile.cs">
+      <DependentUpon>QnAMakerDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuestionObj.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

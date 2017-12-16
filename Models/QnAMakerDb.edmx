@@ -48,11 +48,26 @@
           <Property Name="PushType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Layout" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="QuestionFile">
+          <Key>
+            <PropertyRef Name="QuestionId" />
+          </Key>
+          <Property Name="QuestionId" Type="int" Nullable="false" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="QuestionLevel" Type="int" Nullable="false" />
+          <Property Name="AnswerType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Answer" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Seq" Type="int" Nullable="false" />
+          <Property Name="IsShow" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="QnAMakerDbModelStoreContainer">
           <EntitySet Name="ConversationFile" EntityType="Self.ConversationFile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PushButton" EntityType="Self.PushButton" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PushCard" EntityType="Self.PushCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PushFile" EntityType="Self.PushFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionFile" EntityType="Self.QuestionFile" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -63,6 +78,7 @@
           <EntitySet Name="PushButton" EntityType="QnAMakerDbModel.PushButton" />
           <EntitySet Name="PushCard" EntityType="QnAMakerDbModel.PushCard" />
           <EntitySet Name="PushFile" EntityType="QnAMakerDbModel.PushFile" />
+          <EntitySet Name="QuestionFile" EntityType="QnAMakerDbModel.QuestionFile" />
           </EntityContainer>
         <EntityType Name="ConversationFile">
           <Key>
@@ -106,6 +122,20 @@
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="PushType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Layout" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="QuestionFile">
+          <Key>
+            <PropertyRef Name="QuestionId" />
+          </Key>
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionLevel" Type="Int32" Nullable="false" />
+          <Property Name="AnswerType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Answer" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Seq" Type="Int32" Nullable="false" />
+          <Property Name="IsShow" Type="Boolean" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -157,6 +187,21 @@
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="MainMessage" ColumnName="MainMessage" />
                 <ScalarProperty Name="PushId" ColumnName="PushId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionFile">
+            <EntityTypeMapping TypeName="QnAMakerDbModel.QuestionFile">
+              <MappingFragment StoreEntitySet="QuestionFile">
+                <ScalarProperty Name="IsShow" ColumnName="IsShow" />
+                <ScalarProperty Name="Seq" ColumnName="Seq" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+                <ScalarProperty Name="AnswerType" ColumnName="AnswerType" />
+                <ScalarProperty Name="QuestionLevel" ColumnName="QuestionLevel" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

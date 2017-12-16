@@ -13,6 +13,7 @@ using QnABot.Models;
 
 namespace Microsoft.Bot.Sample.QnABot
 {
+    
     [BotAuthentication]
     public class MessagesController : ApiController
     {
@@ -30,16 +31,61 @@ namespace Microsoft.Bot.Sample.QnABot
 
             // 判斷是否為直接連絡真人的清單
            var strIsConnect = memoryCache.Get(activity.Conversation.Id);
+            Activity reply = null;
 
-            // 如果不在真人聯絡清單中，就採用自動回覆
+            // 如果不在真人聯絡清單中，就找出問題的內容
             if (strIsConnect == null)
             {
                 if (activity.GetActivityType() == ActivityTypes.Message)
                 {
-                    await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+                    QuestionObj Question = new QuestionObj();
+
+                    // 找出是否有答案
+                    QuestionFile answer = Question.GetQuestionAnswer(activity.Text);
+
+                    if (answer == null)
+                    {
+                        // 找不到問題，也找不到答案，後送QnA
+                        await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+                        reply = this.ReplyOptions(activity, null, Question.GetQuestionCards(0));
+                    }
+                    else
+                    {
+                        List<CardAction> cards = new List<CardAction>();
+
+                        // 如果是回到主選單，就取出根目錄的內容
+                        if (activity.Text == "<-回主選單")
+                        {
+                            cards = Question.GetQuestionCards(0);
+                        }
+                        else
+                        {
+                            cards = Question.GetNextQuestionCards(activity.Text);
+                        }
+
+                        // 找到問題，判斷是否有下一層，有下一層就產生選單
+                        if (cards.Count > 0)
+                        {
+                            reply = this.ReplyOptions(activity, null, cards);
+                        }
+                        else
+                        {
+                            // 沒有下一層的話，就判斷回覆的內容是否往QnA送，並顯示相同層級的問題清單
+                            // 一般問題就直接回覆
+                            if (answer.AnswerType == "QnA")
+                            {
+                                await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+
+                                // 我想聯絡小編就不發回覆
+                                if (activity.Text != "我想連絡小編")
+                                    reply = this.ReplyOptions(activity, null, Question.GetSameLevelQuestion(activity.Text));
+                            }
+                            else
+                                reply = this.ReplyOptions(activity, answer.Answer, Question.GetSameLevelQuestion(activity.Text));
+                        }
+                    }
                 }
 
-                var reply = HandleSystemMessage(activity);
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
 
@@ -58,51 +104,13 @@ namespace Microsoft.Bot.Sample.QnABot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-                // Handle conversation state changes, like members being added and removed
-                // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
-                var a = message;
-                var reply = message.CreateReply("有任何簡單的問題都可以點下面的選項查看解答喔");
-                reply.Type = ActivityTypes.Message;
-                reply.TextFormat = TextFormatTypes.Plain;
-
-                reply.SuggestedActions = new SuggestedActions()
-                {
-                    Actions = new List<CardAction>()
-                    {
-                        new CardAction(){ Title = "有關QnA Maker", Type=ActionTypes.ImBack, Value="有關QnA Maker" },
-                        new CardAction(){ Title = "參考資料", Type=ActionTypes.ImBack, Value="參考資料" },
-                        new CardAction(){ Title = "我想連絡小編", Type=ActionTypes.ImBack, Value="我想連絡小編" },
-                    }
-                };
-
-                return reply;
+                this.ReplyOptions(message, "點下面的選項查看解答喔", new QuestionObj().GetQuestionCards(0));
             }
             else if (message.Type == ActivityTypes.Message)
             {
                 // 如果是想跟小編講話，就先暫時把conversationId放入到快取清單中，並且不回覆任何訊息
                 if (message.Text == "我想連絡小編")
-                {
-                    memoryCache.Set(message.Conversation.Id, "1", DateTimeOffset.UtcNow.AddDays(1));
-                }
-                else
-                {
-                    var reply = message.CreateReply("請點選下方的快速連結問題內容");
-                    reply.Type = ActivityTypes.Message;
-                    reply.TextFormat = TextFormatTypes.Plain;
-
-                    reply.SuggestedActions = new SuggestedActions()
-                    {
-                        Actions = new List<CardAction>()
-                    {
-                        new CardAction(){ Title = "有關QnA Maker", Type=ActionTypes.ImBack, Value="有關QnA Maker" },
-                        new CardAction(){ Title = "參考資料", Type=ActionTypes.ImBack, Value="參考資料" },
-                        new CardAction(){ Title = "我想連絡小編", Type=ActionTypes.ImBack, Value="我想連絡小編" },
-                        }
-                    };
-
-                    return reply;
-                }
+                    memoryCache.Set(message.Conversation.Id, "99", DateTimeOffset.UtcNow.AddDays(1));
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
@@ -118,6 +126,31 @@ namespace Microsoft.Bot.Sample.QnABot
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 回送指定的問題項目
+        /// </summary>
+        /// <param name="message">訊息物件</param>
+        /// <param name="strMessage">主要訊息內容</param>
+        /// <param name="cards">回送的卡片物件</param>
+        /// <returns></returns>
+        private Activity ReplyOptions(Activity message, string strMessage, List<CardAction> cards)
+        {
+            var reply = message.CreateReply();
+
+            if (!string.IsNullOrEmpty(strMessage))
+                reply.Text = strMessage;
+            else
+                reply.Text = "請點選下方選單";
+
+            reply.Type = ActivityTypes.Message;
+            reply.TextFormat = TextFormatTypes.Plain;
+
+            if (cards != null)
+                reply.SuggestedActions = new SuggestedActions() { Actions = cards };
+
+            return reply;
         }
     }
 }

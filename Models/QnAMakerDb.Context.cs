@@ -29,5 +29,6 @@ namespace QnABot.Models
         public virtual DbSet<PushButton> PushButton { get; set; }
         public virtual DbSet<PushCard> PushCard { get; set; }
         public virtual DbSet<PushFile> PushFile { get; set; }
+        public virtual DbSet<QuestionFile> QuestionFile { get; set; }
     }
 }
