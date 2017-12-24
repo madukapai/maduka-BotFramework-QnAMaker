@@ -33,12 +33,14 @@ namespace QnABot.Controllers
             var ReceivedMessage = LineBotHelper.GetReceivedMessage(postData);
 
             //發送訊息
-            var ret = LineBotHelper.SendMessage(
-                new List<string>() { ReceivedMessage.result[0].content.from },
-                    "你剛才說了 " + ReceivedMessage.result[0].content.text);
+            //var ret = LineBotHelper.SendMessage(
+            //    new List<string>() { ReceivedMessage.result[0].content.from },
+            //        "你剛才說了 " + ReceivedMessage.result[0].content.text);
 
+            return Request.CreateResponse(HttpStatusCode.OK);
+            
             //如果給200，LineBot訊息就不會重送
-            return Request.CreateResponse(HttpStatusCode.OK, ret);
+            //return Request.CreateResponse(HttpStatusCode.OK, ret);
         }
     }
 }
