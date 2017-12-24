@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Attributes\LineSignature.cs" />
     <Compile Include="Controllers\LineMessagesController.cs" />
     <Compile Include="Controllers\PushController.cs" />
     <Compile Include="Models\ConversationObj.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Models\ConversationFile.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LineModel.cs" />
     <Compile Include="Models\PushButton.cs">
       <DependentUpon>QnAMakerDb.tt</DependentUpon>
     </Compile>
