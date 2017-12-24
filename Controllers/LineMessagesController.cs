@@ -17,13 +17,6 @@ namespace QnABot.Controllers
         string strLineChannelSecret = ConfigurationManager.AppSettings["LineChannelSecret"].ToString();
         string strLineMID = ConfigurationManager.AppSettings["LineMID"].ToString();
 
-        LineBot.LineBotHelper LineBotHelper;
-
-        public LineMessagesController()
-        {
-            LineBotHelper = new LineBot.LineBotHelper(strLineChannelId, strLineChannelSecret, strLineMID);
-        }
-
         [HttpPost]
         [Attributes.LineSignature]
         public IHttpActionResult Post([FromBody] LineModel.LineMessage data)
@@ -51,27 +44,32 @@ namespace QnABot.Controllers
 
         private List<LineModel.SendMessage> procMessage(LineModel.ReceiveMessage m)
         {
-            List<LineModel.SendMessage> msgs = new List<LineModel.SendMessage>();
-            LineModel.SendMessage sm = new LineModel.SendMessage()
+            List<LineModel.SendMessage> objMessageList = new List<LineModel.SendMessage>();
+
+            // 呼叫QnA Maker API，確認問的問題有沒有答案
+            LineModel.SendMessage objMessage = new LineModel.SendMessage()
             {
-                type = Enum.GetName(typeof(LineModel.LineMessage.MessageType), m.type)
+                type = LineModel.LineMessage.MessageType.text.ToString(),
+                text = QnAMaker.GetAnswer(m.text),
             };
-            switch (m.type)
-            {
-                case LineModel.LineMessage.MessageType.sticker:
-                    sm.packageId = m.packageId;
-                    sm.stickerId = m.stickerId;
-                    break;
-                case LineModel.LineMessage.MessageType.text:
-                    sm.text = m.text;
-                    break;
-                default:
-                    sm.type = Enum.GetName(typeof(LineModel.LineMessage.MessageType), LineModel.LineMessage.MessageType.text);
-                    sm.text = "很抱歉，我只是一隻回音機器人，目前只能回覆基本貼圖與文字訊息喔！";
-                    break;
-            }
-            msgs.Add(sm);
-            return msgs;
+
+            //switch (m.type)
+            //{
+            //    case LineModel.LineMessage.MessageType.sticker:
+            //        sm.packageId = m.packageId;
+            //        sm.stickerId = m.stickerId;
+            //        break;
+            //    case LineModel.LineMessage.MessageType.text:
+            //        sm.text = m.text;
+            //        break;
+            //    default:
+            //        sm.type = Enum.GetName(typeof(LineModel.LineMessage.MessageType), LineModel.LineMessage.MessageType.text);
+            //        sm.text = "很抱歉，我只是一隻回音機器人，目前只能回覆基本貼圖與文字訊息喔！";
+            //        break;
+            //}
+
+            objMessageList.Add(objMessage);
+            return objMessageList;
         }
 
 

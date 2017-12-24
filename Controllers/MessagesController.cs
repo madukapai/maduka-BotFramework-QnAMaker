@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.Caching;
 using QnABot.Models;
+using QnABot;
 
 namespace Microsoft.Bot.Sample.QnABot
 {
@@ -46,8 +47,9 @@ namespace Microsoft.Bot.Sample.QnABot
                     if (answer == null)
                     {
                         // 找不到問題，也找不到答案，後送QnA
-                        await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
-                        reply = this.ReplyOptions(activity, null, Question.GetQuestionCards(0));
+                        // await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+                        string strAnswer = QnAMaker.GetAnswer(activity.Text);
+                        reply = this.ReplyOptions(activity, strAnswer, Question.GetQuestionCards(0));
                     }
                     else
                     {
