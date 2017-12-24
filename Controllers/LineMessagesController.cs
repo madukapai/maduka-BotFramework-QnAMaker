@@ -8,6 +8,7 @@ using System.Web.Http;
 using Newtonsoft.Json;
 using System.Configuration;
 using QnABot.Models;
+using Microsoft.Bot.Connector;
 
 namespace QnABot.Controllers
 {
@@ -23,9 +24,11 @@ namespace QnABot.Controllers
         {
             if (data == null) return BadRequest();
             if (data.events == null) return BadRequest();
-
+            // 加入對談清單
             foreach (LineModel.LineMessage.Event e in data.events)
             {
+                new ConversationObj().AddLine(e.replyToken, e.source.userId);
+
                 if (e.type == LineModel.LineMessage.EventType.message)
                 {
                     LineModel.LineReply rb = new LineModel.LineReply()
@@ -34,7 +37,7 @@ namespace QnABot.Controllers
                         messages = procMessage(e.message)
                     };
                     Reply reply = new Reply(rb);
-                    reply.send();
+                    reply.Send();
 
                 }
             }
@@ -95,11 +98,7 @@ namespace QnABot.Controllers
                 }
             }
 
-            /*
-                --- send message to LINE ---
-                return response data
-            */
-            public string send()
+            public string Send()
             {
                 string result = null;
                 try

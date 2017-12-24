@@ -62,6 +62,34 @@ namespace QnABot.Models
         }
 
         /// <summary>
+        /// 加入Line的對話用戶到交談資料表中
+        /// </summary>
+        /// <param name="strReplyToken"></param>
+        /// <param name="strUserId"></param>
+        public void AddLine(string strReplyToken, string strUserId)
+        {
+            ConversationFile objCon = this.Query(strReplyToken).FirstOrDefault();
+
+            if (objCon == null)
+            {
+                objCon = new ConversationFile()
+                {
+                    ConversationId = strReplyToken,
+                    CreateDate = DateTime.Now,
+                    FromId = strUserId,
+                    FromName = strUserId,
+                    ServiceUrl = "https://api.line.me/v2/bot/message/reply",
+                    ChannelId = "Line",
+                    RecipientId = "",
+                    RecipientName = "",
+                };
+
+                db.ConversationFile.Add(objCon);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// 刪除現有的對話資料
         /// </summary>
         /// <param name="strConversationId"></param>
