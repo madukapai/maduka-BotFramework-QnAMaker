@@ -52,7 +52,7 @@ namespace QnABot.Controllers
             LineModel.LineReply rb = new LineModel.LineReply()
             {
                 replyToken = data.ConversationId,
-                messages = new List<LineModel.SendMessage>() { new LineModel.SendMessage() { text = "test"} },
+                messages = new List<LineModel.SendMessage>() { new LineModel.SendMessage() { text = "test", type="text"} },
             };
             LineMessagesController.Reply reply = new LineMessagesController.Reply(rb);
             reply.Send();

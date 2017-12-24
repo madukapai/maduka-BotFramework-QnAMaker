@@ -74,7 +74,7 @@ namespace QnABot.Models
             {
                 objCon = new ConversationFile()
                 {
-                    ConversationId = strReplyToken,
+                    ConversationId = strUserId,
                     CreateDate = DateTime.Now,
                     FromId = strUserId,
                     FromName = strUserId,

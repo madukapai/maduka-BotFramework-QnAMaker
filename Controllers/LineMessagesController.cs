@@ -109,7 +109,7 @@ namespace QnABot.Controllers
                         result = streamReader.ReadToEnd();
                     }
                 }
-                catch (WebException ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                 }
