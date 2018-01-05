@@ -30,6 +30,8 @@ namespace Microsoft.Bot.Sample.QnABot
         {
             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
 
+            this.HandleSystemMessage(activity);
+
             // 判斷是否為直接連絡真人的清單
            var strIsConnect = memoryCache.Get(activity.Conversation.Id);
             Activity reply = null;
@@ -106,7 +108,7 @@ namespace Microsoft.Bot.Sample.QnABot
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-                this.ReplyOptions(message, "點下面的選項查看解答喔", new QuestionObj().GetQuestionCards(0));
+                // this.ReplyOptions(message, "點下面的選項查看解答喔", new QuestionObj().GetQuestionCards(0));
             }
             else if (message.Type == ActivityTypes.Message)
             {
