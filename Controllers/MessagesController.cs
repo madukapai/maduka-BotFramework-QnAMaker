@@ -28,72 +28,80 @@ namespace Microsoft.Bot.Sample.QnABot
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-          ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-
-            this.HandleSystemMessage(activity);
-
-            // 設定語系的快取
-            if (activity.Text == "English" || activity.Text == "繁體中文")
-                memoryCache.Set(activity.Conversation.Id + "_LANG", activity.Text, DateTimeOffset.UtcNow.AddDays(1));
-
-            // 判斷是否為直接連絡真人的清單
-            var strIsConnect = memoryCache.Get(activity.Conversation.Id);
+            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
             Activity reply = null;
+            List<CardAction> cards = new List<CardAction>();
 
-            // 如果不在真人聯絡清單中，就找出問題的內容
-            if (strIsConnect == null)
+            try
             {
-                if (activity.GetActivityType() == ActivityTypes.Message)
+                this.HandleSystemMessage(activity);
+
+                // 設定語系的快取
+                if (activity.Text == "English" || activity.Text == "繁體中文")
+                    memoryCache.Set(activity.Conversation.Id + "_LANG", activity.Text, DateTimeOffset.UtcNow.AddDays(1));
+
+                // 判斷是否為直接連絡真人的清單
+                var strIsConnect = memoryCache.Get(activity.Conversation.Id);
+
+                // 如果不在真人聯絡清單中，就找出問題的內容
+                if (strIsConnect == null)
                 {
-                    QuestionObj Question = new QuestionObj();
-
-                    // 找出是否有答案
-                    QuestionFile answer = Question.GetQuestionAnswer(activity.Text);
-
-                    if (answer == null)
+                    if (activity.GetActivityType() == ActivityTypes.Message)
                     {
-                        // 找不到問題，也找不到答案，後送QnA
-                        // await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
-                        string strAnswer = QnAMaker.GetAnswer(activity.Text);
-                        reply = this.ReplyOptions(activity, strAnswer, Question.GetQuestionCards(0));
-                    }
-                    else
-                    {
-                        List<CardAction> cards = new List<CardAction>();
+                        QuestionObj Question = new QuestionObj();
 
-                        // 如果是回到主選單，就取出根目錄的內容
-                        if (activity.Text == "<-回主選單" || activity.Text == "<-Back to Menu")
+                        // 找出是否有答案
+                        QuestionFile answer = Question.GetQuestionAnswer(activity.Text);
+
+                        if (answer == null)
                         {
-                            cards = Question.GetQuestionCards(0);
+                            // 找不到問題，也找不到答案，後送QnA
+                            // await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+                            string strAnswer = QnAMaker.GetAnswer(activity.Text);
+                            reply = this.ReplyOptions(activity, strAnswer, Question.GetQuestionCards(0));
                         }
                         else
                         {
-                            cards = Question.GetNextQuestionCards(activity.Text);
-                        }
 
-                        // 找到問題，判斷是否有下一層，有下一層就產生選單
-                        if (cards.Count > 0)
-                        {
-                            reply = this.ReplyOptions(activity, null, cards);
-                        }
-                        else
-                        {
-                            // 沒有下一層的話，就判斷回覆的內容是否往QnA送，並顯示相同層級的問題清單
-                            // 一般問題就直接回覆
-                            if (answer.AnswerType == "QnA")
+                            // 如果是回到主選單，就取出根目錄的內容
+                            if (activity.Text == "<-回主選單" || activity.Text == "<-Back to Menu")
                             {
-                                await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
-
-                                // 我想聯絡小編就不發回覆
-                                if (activity.Text != "我想連絡小編" || activity.Text != "I want contact editor")
-                                    reply = this.ReplyOptions(activity, null, Question.GetSameLevelQuestion(activity.Text));
+                                cards = Question.GetQuestionCards(0);
                             }
                             else
-                                reply = this.ReplyOptions(activity, answer.Answer, Question.GetSameLevelQuestion(activity.Text));
+                            {
+                                cards = Question.GetNextQuestionCards(activity.Text);
+                            }
+
+                            // 找到問題，判斷是否有下一層，有下一層就產生選單
+                            if (cards.Count > 0)
+                            {
+                                reply = this.ReplyOptions(activity, null, cards);
+                            }
+                            else
+                            {
+                                // 沒有下一層的話，就判斷回覆的內容是否往QnA送，並顯示相同層級的問題清單
+                                // 一般問題就直接回覆
+                                if (answer.AnswerType == "QnA")
+                                {
+                                    await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
+
+                                    // 我想聯絡小編就不發回覆
+                                    if (activity.Text != "我想連絡小編" || activity.Text != "I want contact editor")
+                                        reply = this.ReplyOptions(activity, null, Question.GetSameLevelQuestion(activity.Text));
+                                }
+                                else
+                                    reply = this.ReplyOptions(activity, answer.Answer, Question.GetSameLevelQuestion(activity.Text));
+                            }
                         }
                     }
-                }
 
+                    await connector.Conversations.ReplyToActivityAsync(reply);
+                }
+            }
+            catch (Exception e)
+            {
+                reply = this.ReplyOptions(activity, e.Message, cards);
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
 
