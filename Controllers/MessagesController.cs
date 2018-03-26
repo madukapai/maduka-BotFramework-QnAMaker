@@ -28,7 +28,7 @@ namespace Microsoft.Bot.Sample.QnABot
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-            ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+          ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
 
             this.HandleSystemMessage(activity);
 
