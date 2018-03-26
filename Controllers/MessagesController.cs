@@ -101,7 +101,7 @@ namespace Microsoft.Bot.Sample.QnABot
             }
             catch (Exception e)
             {
-                reply = this.ReplyOptions(activity, e.Message, cards);
+                reply = this.ReplyOptions(activity, e.Message, null);
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
 
