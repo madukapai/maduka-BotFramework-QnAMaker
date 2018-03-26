@@ -32,8 +32,12 @@ namespace Microsoft.Bot.Sample.QnABot
 
             this.HandleSystemMessage(activity);
 
+            // 設定語系的快取
+            if (activity.Text == "English" || activity.Text == "繁體中文")
+                memoryCache.Set(activity.Conversation.Id + "_LANG", activity.Text, DateTimeOffset.UtcNow.AddDays(1));
+
             // 判斷是否為直接連絡真人的清單
-           var strIsConnect = memoryCache.Get(activity.Conversation.Id);
+            var strIsConnect = memoryCache.Get(activity.Conversation.Id);
             Activity reply = null;
 
             // 如果不在真人聯絡清單中，就找出問題的內容
@@ -58,7 +62,7 @@ namespace Microsoft.Bot.Sample.QnABot
                         List<CardAction> cards = new List<CardAction>();
 
                         // 如果是回到主選單，就取出根目錄的內容
-                        if (activity.Text == "<-回主選單")
+                        if (activity.Text == "<-回主選單" || activity.Text == "<-Back to Menu")
                         {
                             cards = Question.GetQuestionCards(0);
                         }
@@ -81,7 +85,7 @@ namespace Microsoft.Bot.Sample.QnABot
                                 await Conversation.SendAsync(activity, () => new BasicQnAMakerDialog());
 
                                 // 我想聯絡小編就不發回覆
-                                if (activity.Text != "我想連絡小編")
+                                if (activity.Text != "我想連絡小編" || activity.Text != "I want contact editor")
                                     reply = this.ReplyOptions(activity, null, Question.GetSameLevelQuestion(activity.Text));
                             }
                             else
@@ -113,7 +117,7 @@ namespace Microsoft.Bot.Sample.QnABot
             else if (message.Type == ActivityTypes.Message)
             {
                 // 如果是想跟小編講話，就先暫時把conversationId放入到快取清單中，並且不回覆任何訊息
-                if (message.Text == "我想連絡小編")
+                if (message.Text == "我想連絡小編" || message.Text != "I want contact editor")
                     memoryCache.Set(message.Conversation.Id, "99", DateTimeOffset.UtcNow.AddDays(1));
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
@@ -146,8 +150,12 @@ namespace Microsoft.Bot.Sample.QnABot
             if (!string.IsNullOrEmpty(strMessage))
                 reply.Text = strMessage;
             else
-                reply.Text = "請點選下方選單";
-
+            {
+                if (memoryCache.Get(message.Conversation.Id + "_LANG").ToString() == "繁體中文")
+                    reply.Text = "請點選下方選單";
+                else
+                    reply.Text = "Please click on the following menu";
+            }
             reply.Type = ActivityTypes.Message;
             reply.TextFormat = TextFormatTypes.Plain;
 
